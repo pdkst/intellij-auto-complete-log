@@ -10,24 +10,27 @@ https://www.jetbrains.com/help/idea/plugin-development-guidelines.html#plugin-co
     <name>Auto-Complete-Log</name>
 
     <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
-    <vendor email="923130673@qq.com" url="https://github.com/pdkst">pdkstudio</vendor>
+    <vendor email="923130673@qq.com" url="https://github.com/pdkst">pdk studio</vendor>
 
     <!-- Description of the plugin displayed on the Plugin Page and IDE Plugin Manager.
          Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]>
      tag.
          Guidelines:
      https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
-    <description><![CDATA[
+    <description>
+        <![CDATA[
     Auto-completion of logs<br>
     When the user edits log.info("method=> var1={}", var1);<br>
-    such output log code, delete var1 in the string while deleting var1 after it, add, add var2 local variable in the variable<br>
-    while adding var2={} to the string before it<br>
+    such output log code, delete var1 in the string while deleting var1 after it, add <em>var2</em> local variable in the variable<br>
+    while adding <em>var2={}</em> to the string before it<br>
+    <em>Shortcut: CTRL+;</em>
 
     自动补全logs<br>
     实现一个jetbrains插件，<br>
-    在用户编辑log.info("method=> var1={}", var1);这样的输出日志的代码时，删除字符串中的var1的时候，同时删除后面的var1，添加，在变量中添加var2本地变量时，同时在前面的字符串添加var2={}<br>
-    <em></em>
-  ]]></description>
+    在用户编辑log.info("method=> var1={}", var1);这样的输出日志的代码时，删除字符串中的var1的时候，同时删除后面的var1，在变量中添加var2本地变量时，同时在前面的字符串追加var2={}<br>
+    <em>快捷键：CTRL+;</em>
+        ]]>
+    </description>
     <!-- Product and plugin compatibility requirements.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
@@ -46,6 +49,15 @@ https://www.jetbrains.com/help/idea/plugin-development-guidelines.html#plugin-co
             <keyboard-shortcut first-keystroke="control SEMICOLON" keymap="$default"/>
         </action>
     </actions>
+
+    <change-notes>
+        <![CDATA[
+        at version 1.1.0-SNAPSHOT
+        <ul>
+            <li>1. 修复了部分情况下无法自动补全的问题</li>
+        </ul>
+        ]]>
+    </change-notes>
 
 
 </idea-plugin>
