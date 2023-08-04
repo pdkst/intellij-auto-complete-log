@@ -10,11 +10,11 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Arrays;
 import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class AutoCompleteAction extends AnAction {
     public AutoCompleteAction() {
@@ -40,15 +40,20 @@ public class AutoCompleteAction extends AnAction {
 
         assert methodCallExpression != null;
         PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
-        if (!Objects.equals(methodExpression.getReferenceName(), "info")) {
+        if (!StringUtils.containsAny(methodExpression.getReferenceName(), "debug", "info", "warn", "error", "trace", "fatal")) {
             return;
         }
 
         PsiExpressionList parameterList = methodCallExpression.getArgumentList();
-        String parameterText = parameterList.getText();
-
-        // Modify the parameter text here
-        String modifiedParameterText = modifyParameterText(parameterText);
+        if (parameterList.isEmpty()) {
+            // 参数列表为空
+            return;
+        }
+        PsiType[] parameterTypes = parameterList.getExpressionTypes();
+        if (!Objects.equals(parameterTypes[0].getCanonicalText(), "java.lang.String")) {
+            // 第一个参数不是String类型
+            return;
+        }
 
         WriteCommandAction.runWriteCommandAction(project, () -> {
             PsiDocumentManager documentManager = PsiDocumentManager.getInstance(project);
@@ -56,7 +61,9 @@ public class AutoCompleteAction extends AnAction {
             documentManager.doPostponedOperationsAndUnblockDocument(document);
             TextRange textRange = parameterList.getTextRange();
             try {
-                document.replaceString(textRange.getStartOffset(), textRange.getEndOffset(), modifiedParameterText);
+                // Modify the parameter text here
+                String modifiedParameterText = reformat(parameterList.getExpressions());
+                document.replaceString(textRange.getStartOffset(), textRange.getEndOffset(), "(" + modifiedParameterText + ")");
             } catch (StringIndexOutOfBoundsException e1) {
                 System.out.println("Error: " + e1.getMessage());
             }
@@ -64,46 +71,48 @@ public class AutoCompleteAction extends AnAction {
         });
     }
 
-    private static String modifyParameterText(String expression) {
-        String stripExpression = StringUtils.strip(expression, "()").trim();
+    private static String reformat(PsiExpression[] parameters) {
+        if (ArrayUtils.isEmpty(parameters)) {
+            return "";
+        }
+        String textExpression = parameters[0].getText();
+        if (parameters.length == 1) {
+            return textExpression;
+        }
+        String[] otherParameters = Arrays.stream(parameters)
+                .skip(1)
+                .map(PsiElement::getText)
+                .toArray(String[]::new);
+        String text = StringUtils.strip(textExpression, "\"");
+        String reformatText = reformatContent(text, otherParameters);
+        StringBuilder builder = new StringBuilder("\"").append(reformatText).append("\"");
+        for (int i = 1; i < parameters.length; i++) {
+            builder.append(", ")
+                    .append(parameters[i].getText());
+        }
+        return builder.toString();
+    }
 
-        Pattern pattern = Pattern.compile("^\"([^\"]*)\"");
-        Matcher matcher = pattern.matcher(stripExpression);
-        if (!matcher.find()) {
-            return expression;
+    private static String reformatContent(String content, String... args) {
+        if (args == null || args.length == 0) {
+            return content;
         }
-        String content = matcher.group(0);
-        String argsString = stripExpression.substring(content.length());
-        content = StringUtils.strip(content, "\"");
-        String[] args = StringUtils.split(argsString, ", ");
-        if (args.length == 0) {
-            return expression;
-        }
-        for (int i = 0; i < args.length; i++) {
-            int index = args.length - 1 - 1;
-            String argument = args[index];
-            content = content.replace(StringUtils.trim(argument) + "={}", "");
-            Pattern patten = Pattern.compile(argument + "=\\{},?");
-            content = patten.matcher(content).replaceAll("");
-        }
-
-        StringBuilder contentBuilder = new StringBuilder("(\"").append(content);
-        for (int i = 0; i < args.length; i++) {
-            String arg = StringUtils.trim(args[i]);
-            contentBuilder.append(arg).append("={}");
-            if (i != args.length - 1) {
-                contentBuilder.append(", ");
+        for (String arg : args) {
+            String logExpression = arg + "={}";
+            if (content.contains(", " + logExpression)) {
+                content = content.replace(", " + logExpression, "");
+            } else if (content.contains("," + logExpression)) {
+                content = content.replace("," + logExpression, "");
+            } else {
+                content = content.replace(logExpression, "");
             }
         }
-        contentBuilder.append("\", ");
-        for (int i = 0; i < args.length; i++) {
-            contentBuilder.append(args[i]);
-            if (i != args.length - 1) {
-                contentBuilder.append(", ");
-            }
-        }
 
-        return contentBuilder.append(")").toString();
+        StringBuilder builder = new StringBuilder(content);
+        for (String arg : args) {
+            builder.append(", ").append(arg).append("={}");
+        }
+        return builder.toString();
     }
 
 }
