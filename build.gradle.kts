@@ -1,6 +1,6 @@
 plugins {
     id("java")
-    id("org.jetbrains.intellij") version "1.12.0"
+    id("org.jetbrains.intellij") version "1.15.0"
 }
 
 group = "io.github.pdkst"
@@ -24,6 +24,7 @@ intellij {
 }
 
 dependencies {
+    implementation(group = "org.apache.commons", name = "commons-lang3", version = "3.13.0")
 }
 
 tasks {
@@ -36,7 +37,7 @@ tasks {
 
     patchPluginXml {
         sinceBuild.set("221")
-        untilBuild.set("231.*")
+        untilBuild.set("232.*")
     }
 
     signPlugin {
