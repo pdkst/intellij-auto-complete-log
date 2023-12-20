@@ -52,6 +52,10 @@ https://www.jetbrains.com/help/idea/plugin-development-guidelines.html#plugin-co
 
     <change-notes>
         <![CDATA[
+        at version 1.1.1-SNAPSHOT
+        <ul>
+            <li>1. 兼容了 intellij 2023.3版本</li>
+        </ul>
         at version 1.1.0-SNAPSHOT
         <ul>
             <li>1. 修复了部分情况下无法自动补全的问题</li>

@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "io.github.pdkst"
-version = "1.1.0-SNAPSHOT"
+version = "1.1.1-SNAPSHOT"
 
 repositories {
     maven {
@@ -37,7 +37,7 @@ tasks {
 
     patchPluginXml {
         sinceBuild.set("221")
-        untilBuild.set("232.*")
+        untilBuild.set("233.*")
     }
 
     signPlugin {
