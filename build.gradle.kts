@@ -1,10 +1,10 @@
 plugins {
     id("java")
-    id("org.jetbrains.intellij") version "1.15.0"
+    id("org.jetbrains.intellij") version "1.17.2"
 }
 
 group = "io.github.pdkst"
-version = "1.1.1-SNAPSHOT"
+version = "1.1.2"
 
 repositories {
     maven {
@@ -37,7 +37,7 @@ tasks {
 
     patchPluginXml {
         sinceBuild.set("221")
-        untilBuild.set("233.*")
+        untilBuild.set("241.*")
     }
 
     signPlugin {
