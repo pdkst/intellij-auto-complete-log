@@ -25,6 +25,9 @@ intellij {
 
 dependencies {
     implementation(group = "org.apache.commons", name = "commons-lang3", version = "3.13.0")
+    implementation("ch.qos.logback:logback-classic:1.5.0")
+    compileOnly("org.projectlombok:lombok:1.18.30")
+    annotationProcessor("org.projectlombok:lombok:1.18.30")
 }
 
 tasks {
