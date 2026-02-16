@@ -39,6 +39,7 @@ bin/
 
 ### VS Code ###
 .vscode/
+.codebuddy/
 
 ### Mac OS ###
 .DS_Store
