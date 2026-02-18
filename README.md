@@ -87,6 +87,9 @@ intellij-auto-complete-log/
 
 ## 版本历史
 
+### v1.3.0
+- 版本升级
+
 ### v1.1.2
 - 兼容 IntelliJ 2024.1 版本
 

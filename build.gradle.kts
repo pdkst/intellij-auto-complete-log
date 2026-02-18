@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "io.github.pdkst"
-version = "1.1.3"
+version = "1.3.0"
 
 repositories {
     maven {
@@ -22,7 +22,7 @@ intellij {
 }
 
 dependencies {
-    implementation(group = "org.apache.commons", name = "commons-lang3", version = "3.13.0")
+    implementation(group = "org.apache.commons", name = "commons-lang3", version = "3.18.0")
     compileOnly("org.projectlombok:lombok:1.18.30")
     annotationProcessor("org.projectlombok:lombok:1.18.30")
 }
