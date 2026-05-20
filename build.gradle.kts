@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "io.github.pdkst"
-version = "1.3.0"
+version = "1.4.0"
 
 repositories {
     maven {
@@ -39,7 +39,7 @@ tasks {
     
     patchPluginXml {
         sinceBuild.set("221")
-        untilBuild.set("251.*")
+        untilBuild.set("261.*")
     }
     
     runIde {

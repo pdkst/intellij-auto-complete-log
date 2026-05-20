@@ -59,6 +59,10 @@ https://www.jetbrains.com/help/idea/plugin-development-guidelines.html#plugin-co
 
     <change-notes>
         <![CDATA[
+        at version 1.4.0
+        <ul>
+            <li>1. 兼容 IntelliJ 2026.1 (261)</li>
+        </ul>
         at version 1.3.0
         <ul>
             <li>1. 版本升级</li>
